@@ -1,0 +1,53 @@
+; Author: Bao Le (PCMakia)
+BR main
+y:.word 0
+z:.word 0
+large:.word 0
+sum:.EQUATE 0
+enter: .ascii"Enter three numbers: \x00"
+endl:.ascii"\n\x00"
+big:.ascii"The largest is \x00"
+total:.ascii"The sum is \x00"
+
+getNum:  STRO enter, d
+         STRO endl, d
+         DECI x, d
+         DECI y, d
+         DECI z, d
+         RET
+
+largest: LDWA x, d
+         CPWA y, d
+         BRLE elseif
+         LDWA x, d
+         CPWA z, d
+         BRLE elseif
+         LDWA x, d
+         STWA large, d
+         BR rest
+elseif:  LDWA y, d
+         CPWA z, d
+         BRLE else
+         LDWA y, d
+         STWA large, d
+         BR rest
+else:    LDWA z, d
+         STWA large, d
+rest:    RET
+
+main:    SUBSP 2, i
+         CALL getNum
+         CALL largest
+         LDWA x, d
+         ADDA y, d
+         ADDA z, d
+         STWA sum, s
+         STRO big, d
+         DECO large, d
+         STRO endl, d
+         STRO total, d
+         DECO sum, s
+         STRO endl, d
+         ADDSP 2, i
+         STOP
+         .END
